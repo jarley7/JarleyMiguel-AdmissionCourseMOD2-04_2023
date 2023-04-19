@@ -22,13 +22,22 @@ class ObstacleManager:
         for obstacle in self.obstacles:
             obstacle.update(game.game_speed, self.obstacles)
             if game.player.dino_rect.colliderect(obstacle.rect):
-                pygame.time.delay(1000)
-                game.playing = False
-                game.death_count += 1
-                game.last_score = game.score
-                game.score = game.score - game.score
-                game.game_speed = 20
-                break
+                if not game.player.has_power_up:
+                    pygame.time.delay(500)
+                    game.playing = False
+                    game.death_count += 1
+                    game.last_score = game.score
+                    game.score = game.score - game.score
+                    game.game_speed = 20
+                    break
+                if game.player.has_power_up: self.obstacles.remove(obstacle)
+                if game.player.hammer == True and game.player.dino_rect.colliderect(obstacle.rect):
+                    game.obstacles_beaten = game.obstacles_beaten + 1
+                    game.score += (game.obstacles_beaten * 10)
+                    print(game.obstacles_beaten)
+                    print(game.score)
+                   
+        
 
     def draw(self, screen):
         for obstacle in self.obstacles:
