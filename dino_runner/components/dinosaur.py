@@ -1,7 +1,7 @@
 import pygame
 from pygame.sprite import Sprite
 
-from dino_runner.utils.constants import DUCKING, RUNNING, JUMPING, DEFAULT_TYPE, SHIELD_TYPE, HAMMER_TYPE, DUCKING_SHIELD, JUMPING_SHIELD, RUNNING_SHIELD, RUNNING_HAMMER, DUCKING_HAMMER, JUMPING_HAMMER
+from dino_runner.utils.constants import DUCKING, RUNNING, JUMPING, DEFAULT_TYPE, SHIELD_TYPE, HAMMER_TYPE, DUCKING_SHIELD, JUMPING_SHIELD, RUNNING_SHIELD, RUNNING_HAMMER, DUCKING_HAMMER, JUMPING_HAMMER, DEAD
 
 DUCK_IMG = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD, HAMMER_TYPE: DUCKING_HAMMER}
 JUMP_IMG = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD, HAMMER_TYPE: JUMPING_HAMMER}
@@ -36,13 +36,19 @@ class Dinosaur(Sprite):
         self.hammer_time_up = 0    
 
     
-    #def startLoop(self):
-        #self.image = RUNNING[0] if self.step_index < 5 else RUNNING[1]
-        #self.dino_rect = self.image.get_rect()
-       # self.dino_rect.x = self.X_POS
-        #self.dino_rect.y = self.Y_POS
-       # self.step_index += 1
+    def runLoop(self):
+        
+        self.image = RUNNING_IMG[self.type][self.step_index // 5]
+        self.dino_rect = self.image.get_rect()
+        self.dino_rect.x = self.X_POS
+        self.dino_rect.y = self.Y_POS
+        self.step_index += 1
+        if self.step_index >= 9:
+            self.step_index = 0
 
+    def dead(self, playing, screen):
+        if playing == False:
+            screen.blit(DEAD,(self.dino_rect.x, self.dino_rect.y))   
 
     def update(self, user_input):
         if self.dino_run:
@@ -50,7 +56,7 @@ class Dinosaur(Sprite):
         elif self.dino_jump:
             self.jump()
         elif self.dino_duck:
-            self.duck()
+            self.duck()    
                
 
         if self.step_index >= 9:
@@ -70,7 +76,9 @@ class Dinosaur(Sprite):
                 self.dino_jump = False
                 self.dino_run = True
                 self.dino_duck = True
-            
+
+  
+
 
     def run(self):
          if self.dino_duck:

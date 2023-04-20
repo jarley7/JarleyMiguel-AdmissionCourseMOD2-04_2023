@@ -10,13 +10,13 @@ class ObstacleManager:
         self.obstacles = []
 
     def update(self, game):
-        index = random.randint(0, 2)
+        index = random.randint(0,2)
         obstacle_list = [SMALL_CACTUS, LARGE_CACTUS, BIRD]
         if len(self.obstacles) == 0:
             if index == 0 or index == 1:
                 self.obstacles.append(Cactus(obstacle_list[index]))
             else:
-                self.obstacles.append(Bird(BIRD))            
+                self.obstacles.append(Bird())            
                 
 
         for obstacle in self.obstacles:
@@ -33,7 +33,7 @@ class ObstacleManager:
                 if game.player.has_power_up: self.obstacles.remove(obstacle)
                 if game.player.hammer == True and game.player.dino_rect.colliderect(obstacle.rect):
                     game.obstacles_beaten = game.obstacles_beaten + 1
-                    game.score += (game.obstacles_beaten * 10)
+                    game.score += (game.obstacles_beaten * 10) #multiplica a quantidade de obstaculos por 10 e soma ao score
                     print(game.obstacles_beaten)
                     print(game.score)
                    
